@@ -34,7 +34,7 @@ config :getatrex,
 ```
 mix gettext.merge priv/gettext --locale es
 ```
-3. Make `git commit -a -m 'added new spanish locale' to have this fixed in git with possibility to 
+3. Make `git commit -a -m 'added new spanish locale'` to have this fixed in git with possibility to 
 
 4. Translate new Spanish locale with getatrex:
 ```
