@@ -9,7 +9,8 @@ defmodule Getatrex.Mixfile do
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       deps: deps(),
-      dialyzer: [ignore_warnings: "dialyzer.ignore-warnings"]
+      dialyzer: [ignore_warnings: "dialyzer.ignore-warnings"],
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
@@ -37,7 +38,8 @@ defmodule Getatrex.Mixfile do
       {:gcloudex, git: "https://github.com/alexfilatov/gcloudex.git"},
       {:remix, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, "~> 0.9.0-rc1", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.8.1", only: :test},
     ]
   end
 end
