@@ -29,6 +29,8 @@ defmodule Getatrex.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
+      {:goth, ">= 0.0.0"},
+      {:gcloudex, ">= 0.0.0"},
       {:remix, ">= 0.0.0", only: :dev},
     ]
   end
