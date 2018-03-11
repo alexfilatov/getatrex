@@ -1,0 +1,8 @@
+Unknown function 'Elixir.Mix':shell/0
+Unknown function 'Elixir.Mix.Task':run/1
+Callback info about the 'Elixir.Mix.Task' behaviour is not available
+Invalid type specification for function 'Elixir.Getatrex.Translator.Google':languages/0
+Overloaded contract for 'Elixir.Getatrex.Translator.Google':languages/1 has overlapping domains;
+Overloaded contract for 'Elixir.Getatrex.Translator.Google':detect/1 has overlapping domains;
+Overloaded contract for 'Elixir.Getatrex.Translator.Google':request/4 has overlapping domains;
+Overloaded contract for 'Elixir.Getatrex.Translator.Google':translate/1 has overlapping domains;
