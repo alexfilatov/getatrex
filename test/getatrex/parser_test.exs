@@ -1,6 +1,6 @@
-defmodule GetatrexTest do
+defmodule Getatrex.ParserTest do
   use ExUnit.Case
-  doctest Getatrex
+  doctest Getatrex.Parser
 
   test "parse msgid string" do
     assert {:ok, "Welcome!"} == Getatrex.Parser.msgid_message("msgid \"Welcome!\"")
@@ -8,4 +8,7 @@ defmodule GetatrexTest do
     assert {:error, :msgid_not_found} == Getatrex.Parser.msgid_message("msgid")
     assert {:error, :msgid_not_found} == Getatrex.Parser.msgid_message("some test string")
   end
+
+
+
 end
