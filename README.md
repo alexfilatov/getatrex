@@ -1,4 +1,4 @@
-# Getatrex
+# Getatrex ![circleci](https://circleci.com/gh/alexfilatov/getatrex.svg?style=shield)
 
 **GETATREX** - **GET**text**A**utomatic**TR**anslator written in **E**li**X**ir
 
@@ -16,13 +16,13 @@ def deps do
 end
 ```
 
-2. Add Google Cloud Translation API Key 
+2. Add Google Cloud Translation API Key
 
 If you don't have API key, you can get it in your Google Cloud Console https://console.cloud.google.com/apis/credentials
 
 Open your `config/config.exs` file and add following:
 ```
-config :getatrex, 
+config :getatrex,
   key: "HERE_IS_YOUR_KEY"
 ```  
 
@@ -44,4 +44,3 @@ mix gettext.merge priv/gettext --locale es
 Now you have it translated and open your IDE to fix translations:
 - fix silly translations
 - fix gettext palceholders, e.g. `%{placeholder_name}`, which will be translated by Google as `% {placeholder_name}` (btw, could be automated as well)
-
