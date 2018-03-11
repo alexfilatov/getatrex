@@ -2,12 +2,14 @@ defmodule Getatrex.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :getatrex,
-     version: "0.1.0",
-     elixir: "~> 1.6.2",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps()]
+    [
+      app: :getatrex,
+      version: "0.1.0",
+      elixir: "~> 1.6.2",
+      build_embedded: Mix.env == :prod,
+      start_permanent: Mix.env == :prod,
+      deps: deps()
+    ]
   end
 
   # Configuration for the OTP application
@@ -29,8 +31,9 @@ defmodule Getatrex.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:goth, ">= 0.0.0"},
-      {:gcloudex, ">= 0.0.0"},
+      {:jason, ">= 0.0.0"},
+      {:goth, git: "https://github.com/alexfilatov/goth.git"},
+      {:gcloudex, git: "https://github.com/alexfilatov/gcloudex.git"},
       {:remix, ">= 0.0.0", only: :dev},
     ]
   end

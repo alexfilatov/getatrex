@@ -1,0 +1,429 @@
+## `msgid`s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove `msgid`s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use `mix gettext.extract --merge` or `mix gettext.merge`
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: de\n"
+
+#: web/templates/layout/top_navigation.html.eex:17
+msgid "Home"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_postback.ex:19
+msgid "Welcome"
+msgstr ""
+
+#: web/templates/layout/top_navigation.html.eex:19
+msgid "About"
+msgstr ""
+
+#: lib/bot_shop_facebook/init.ex:50
+msgid "About us"
+msgstr ""
+
+#: web/templates/shop/index.html.eex:9
+msgid "All shop bots"
+msgstr ""
+
+#: web/templates/layout/top_navigation.html.eex:20
+msgid "Contacts"
+msgstr ""
+
+#: web/templates/layout/top_navigation.html.eex:24
+#: web/templates/private_page/dashboard.html.eex:4
+#: web/templates/shop/edit.html.eex:5 web/templates/shop/index.html.eex:5
+#: web/templates/shop/new.html.eex:5 web/templates/shop/show.html.eex:5
+msgid "Dashboard"
+msgstr ""
+
+#: web/templates/private_page/dashboard.html.eex:53
+#: web/templates/shop/edit.html.eex:7 web/templates/shop/show.html.eex:32
+msgid "Edit"
+msgstr ""
+
+#: web/templates/shop/edit.html.eex:14
+msgid "Edit shop bot"
+msgstr ""
+
+#: web/templates/auth/login.html.eex:4
+msgid "Enter"
+msgstr ""
+
+#: web/views/layout_view.ex:43
+msgid "Get very own Facebook Chatbot for your online store with few clicks. Simple e-commerce chatbot engine"
+msgstr ""
+
+#: web/templates/layout/top_navigation.html.eex:30
+msgid "Login"
+msgstr ""
+
+#: web/templates/layout/top_navigation.html.eex:28
+msgid "Logout"
+msgstr ""
+
+#: web/templates/private_page/dashboard.html.eex:17
+#: web/templates/shop/form.html.eex:19
+msgid "Name"
+msgstr ""
+
+#: web/views/layout_view.ex:37
+msgid "Shopybot - Facebook E-Commerce Chat Bot for Your Online Store"
+msgstr ""
+
+#: web/templates/auth/login.html.eex:7
+msgid "Please register Facebook account if you don't have one"
+msgstr ""
+
+#: web/templates/auth/login.html.eex:6
+msgid "We use Facebook to enter our system. "
+msgstr ""
+
+#: web/templates/page/homepage.html.eex:55
+msgid "Why you need an E-Commerce Bot?"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:199
+msgid "Back"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:249
+#: lib/bot_shop_facebook/views/wizard.ex:8
+#: lib/bot_shop_facebook/views/wizard.ex:26
+msgid "Browse Categories"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:158
+#: web/templates/shop/form.html.eex:26 web/templates/shop/show.html.eex:39
+msgid "Description"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_postback.ex:59
+msgid "Display All"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:246
+msgid "First page"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_postback.ex:58
+msgid "Here what we have"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_quick_reply.ex:33
+msgid "Here what we have in %{text_message}"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:215
+msgid "Here you go:"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:241
+msgid "Start over?"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:48
+#: lib/bot_shop_facebook/views/product_card.ex:89
+#: lib/bot_shop_facebook/views/product_card.ex:124
+#: lib/bot_shop_facebook/views/product_card.ex:232
+msgid "ℹ️ Details"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:191
+msgid "📷 Images"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:51
+#: lib/bot_shop_facebook/views/product_card.ex:92
+#: lib/bot_shop_facebook/views/product_card.ex:127
+#: lib/bot_shop_facebook/views/product_card.ex:193
+#: lib/bot_shop_facebook/views/product_card.ex:230
+msgid "🛒 Buy %{product_price}"
+msgstr ""
+
+#: web/templates/shop/show.html.eex:70
+msgid "Bot Facebook page"
+msgstr ""
+
+#: web/templates/shop/show.html.eex:25
+msgid "Click to download large version"
+msgstr ""
+
+#: web/templates/shop/show.html.eex:60
+msgid "Click to open"
+msgstr ""
+
+#: web/templates/shop/show.html.eex:110
+msgid "Connect"
+msgstr ""
+
+#: web/templates/shop/form.html.eex:38 web/templates/shop/show.html.eex:57
+msgid "Products Export URL"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:169
+msgid "Properties:"
+msgstr ""
+
+#: web/templates/shop/form.html.eex:32 web/templates/shop/show.html.eex:48
+msgid "Website"
+msgstr ""
+
+#: web/templates/private_page/dashboard.html.eex:8
+#: web/templates/private_page/dashboard.html.eex:148
+msgid "Add bot"
+msgstr ""
+
+#: web/templates/shop/new.html.eex:12
+msgid "Create new bot"
+msgstr ""
+
+#: web/templates/shop/index.html.eex:6
+msgid "All bots"
+msgstr ""
+
+#: web/templates/private_page/dashboard.html.eex:69
+msgid "Analytics"
+msgstr ""
+
+#: web/templates/shop/show.html.eex:155
+msgid "Are you sure to disconnect?"
+msgstr ""
+
+#: web/templates/shop/form.html.eex:64
+msgid "Bot Greeting"
+msgstr ""
+
+#: web/templates/shop/form.html.eex:12
+msgid "Bot Messages"
+msgstr ""
+
+#: web/templates/layout/footer.html.eex:47 web/templates/shop/form.html.eex:88
+msgid "Cancel"
+msgstr ""
+
+#: web/templates/shop/show.html.eex:154
+msgid "Connect to this page?"
+msgstr ""
+
+#: web/templates/shop/form.html.eex:11
+msgid "Main Settings"
+msgstr ""
+
+#: web/templates/private_page/dashboard.html.eex:7
+msgid "My bots"
+msgstr ""
+
+#: web/templates/shop/index.html.eex:10 web/templates/shop/new.html.eex:6
+msgid "New bot"
+msgstr ""
+
+#: web/templates/shop/show.html.eex:157
+msgid "No"
+msgstr ""
+
+#: web/templates/shop/form.html.eex:71
+msgid "Phrase by default"
+msgstr ""
+
+#: web/templates/private_page/dashboard.html.eex:87
+msgid "Product redirects"
+msgstr ""
+
+#: web/templates/private_page/dashboard.html.eex:83
+msgid "Product views"
+msgstr ""
+
+#: web/templates/shop/form.html.eex:77
+msgid "Welcome message"
+msgstr ""
+
+#: web/templates/shop/show.html.eex:156
+msgid "Yes"
+msgstr ""
+
+#: web/templates/shop/show.html.eex:75
+msgid "Connected to"
+msgstr ""
+
+#: web/templates/shop/show.html.eex:78
+msgid "Disconnect"
+msgstr ""
+
+#: web/templates/shop/form.html.eex:86
+msgid "Save"
+msgstr ""
+
+#: web/templates/shop/edit.html.eex:13
+msgid "View bot"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:7
+#: lib/bot_shop_facebook/views/product_card.ex:19
+#: lib/bot_shop_facebook/views/product_card.ex:31
+msgid "Do you want to view more?"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:7
+#: lib/bot_shop_facebook/views/product_card.ex:19
+#: lib/bot_shop_facebook/views/product_card.ex:31
+msgid "Next page"
+msgstr ""
+
+#: web/controllers/shop_controller.ex:166
+msgid "Bot created successfully."
+msgstr ""
+
+#: web/templates/private_page/dashboard.html.eex:61
+msgid "No bots. Please add one"
+msgstr ""
+
+#: web/templates/private_page/dashboard.html.eex:94
+msgid "No data. Please add a bot to start collecting data"
+msgstr ""
+
+#: web/templates/page/homepage.html.eex:124
+msgid "Oh no! This is soooo hard!!"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_postback.ex:19
+msgid "Welcome back"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_postback.ex:150
+msgid "Added to wish list successfully!"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_postback.ex:164
+msgid "Cannot find it in your wishlist!"
+msgstr ""
+
+#: web/templates/shop/form.html.eex:54
+msgid "If shop's currency differs from product currency, we convert the price to the shop currency."
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_postback.ex:187
+msgid "No products in your wishlist."
+msgstr ""
+
+#: web/templates/shop/show.html.eex:62
+msgid "Please add product export URL"
+msgstr ""
+
+#: web/templates/shop/form.html.eex:55
+msgid "Please choose whether we need to round the price after conversion to avoid numbers like $567.89 instead of $570"
+msgstr ""
+
+#: web/templates/shop/form.html.eex:52
+msgid "Round prices"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:201
+msgid "Similar products"
+msgstr ""
+
+#: lib/bot_shop_facebook/init.ex:41
+msgid "Start"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_postback.ex:152
+msgid "This was already added to wishlist!"
+msgstr ""
+
+#: lib/bot_shop_facebook/init.ex:46
+msgid "Wishlist"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_postback.ex:167
+msgid "Wishlist entry deleted"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:126
+msgid "❌ From wishlist"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/product_card.ex:50
+#: lib/bot_shop_facebook/views/product_card.ex:91
+#: lib/bot_shop_facebook/views/product_card.ex:192
+#: lib/bot_shop_facebook/views/product_card.ex:231
+msgid "❤️ To wishlist"
+msgstr ""
+
+#: web/templates/auth/login.html.eex:16
+msgid "By clicking \"Enter with Facebook\" you accept our %{a_open}Terms of Use%{a_close}"
+msgstr ""
+
+#: web/templates/auth/login.html.eex:11
+msgid "Enter with Facebook"
+msgstr ""
+
+#: lib/utils/messages.ex:8
+msgid "Hello :)"
+msgstr ""
+
+#: lib/utils/messages.ex:7
+msgid "Hello!"
+msgstr ""
+
+#: lib/utils/messages.ex:10
+msgid "Hey!"
+msgstr ""
+
+#: lib/utils/messages.ex:6
+msgid "Hi!"
+msgstr ""
+
+#: lib/utils/messages.ex:11
+msgid "Hi! What's up?"
+msgstr ""
+
+#: lib/bot_shop_facebook/views/wizard.ex:8
+msgid "Let's get shopping! What are you looking for?"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_postback.ex:209
+msgid "Please type what are you looking for"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_message.ex:118
+msgid "Searching products for %{text}"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_message.ex:28
+#: lib/bot_shop_facebook/views/wizard.ex:8
+#: lib/bot_shop_facebook/views/wizard.ex:26
+msgid "Something specific"
+msgstr ""
+
+#: web/templates/layout/footer.html.eex:16
+msgid "Terms of use"
+msgstr ""
+
+#: lib/utils/messages.ex:9
+msgid "Welcome!"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_postback.ex:210
+msgid "For example '%{suggestions}'"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_message.ex:23
+msgid "I am shopping bot of the %{shop_name} shop."
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_message.ex:27
+msgid "Let's get started! What are you looking for?"
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_message.ex:134
+#: lib/bot_shop_facebook/handlers/handle_message.ex:137
+msgid "Nothing found for '%{text}'."
+msgstr ""
+
+#: lib/bot_shop_facebook/handlers/handle_message.ex:138
+msgid "Please try different search like %{suggestions}"
+msgstr ""
