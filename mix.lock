@@ -1,5 +1,8 @@
 %{
+  "bunt": {:hex, :bunt, "0.2.0", "951c6e801e8b1d2cbe58ebbd3e616a869061ddadcc4863d0a2182541acae9a38", [:mix], [], "hexpm"},
   "certifi": {:hex, :certifi, "2.0.0", "a0c0e475107135f76b8c1d5bc7efb33cd3815cb3cf3dea7aefdd174dabead064", [:rebar3], [], "hexpm"},
+  "credo": {:hex, :credo, "0.9.0-rc8", "30d8633408353d08db03f3ea5a14a2aaee84268c19b5198f5963916634a16558", [:mix], [{:bunt, "~> 0.2.0", [hex: :bunt, repo: "hexpm", optional: false]}, {:poison, ">= 0.0.0", [hex: :poison, repo: "hexpm", optional: false]}], "hexpm"},
+  "dialyxir": {:hex, :dialyxir, "0.5.1", "b331b091720fd93e878137add264bac4f644e1ddae07a70bf7062c7862c4b952", [:mix], [], "hexpm"},
   "earmark": {:hex, :earmark, "1.2.4", "99b637c62a4d65a20a9fb674b8cffb8baa771c04605a80c911c4418c69b75439", [:mix], [], "hexpm"},
   "gcloudex": {:git, "https://github.com/alexfilatov/gcloudex.git", "1302ce5d4914f41133c3f7d4b74efb0d6aac7c75", []},
   "goth": {:git, "https://github.com/alexfilatov/goth.git", "735cb1216f267bfbb130d91a5a38a79235e6ab11", []},

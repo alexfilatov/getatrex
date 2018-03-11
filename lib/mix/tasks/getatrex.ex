@@ -1,4 +1,7 @@
 defmodule Mix.Tasks.Getatrex do
+  @moduledoc """
+  Runs locale translation routine
+  """
 
   use Mix.Task
 
@@ -7,13 +10,11 @@ defmodule Mix.Tasks.Getatrex do
   def run([from_lang, to_lang | tail]) do
     Mix.shell.info "Starting..."
 
-    
-
     Mix.shell.info "Done!"
   end
 
   def run(_), do: run()
-  def run() do
+  def run do
     Mix.shell.info "Call this task in the following way:"
     Mix.shell.info ""
     Mix.shell.info "\t$ mix getatrex es"
