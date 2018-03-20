@@ -11,7 +11,7 @@ defmodule Getatrex.Writer do
   use GenServer
 
   def start_link(filename) do
-    GenServer.start_link(__MODULE__, %{filename: filename, file_pointer: nil}, name: __MODULE__)
+    GenServer.start_link(__MODULE__, %{filename: filename, file_pointer: File.open!(filename, [:append])}, name: __MODULE__)
   end
 
   def init(state) do
@@ -23,9 +23,11 @@ defmodule Getatrex.Writer do
   end
 
   def write(line) do
-
+    :ok = GenServer.call(__MODULE__, {:write, line})
   end
 
-
+  def handle_call({:write, line}, _from, state) do
+    {:reply, File.write(state[:filename], line), state}
+  end
 
 end
