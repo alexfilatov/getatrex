@@ -12,16 +12,36 @@ defmodule Getatrex.WriterTest do
     %{pid: pid, filename: filename}
   end
 
-  test "writing single line", %{filename: filename} do
-    line = "hello world"
+  describe "writing single lines" do
+    test "writing single line", %{filename: filename} do
+      line = "hello world"
 
-    line |> Getatrex.Writer.write()
+      Getatrex.Writer.write(line)
 
-    content = filename
-    |> get_support_path()
-    |> File.read!()
+      content = filename
+      |> get_support_path()
+      |> File.read!()
 
-    assert content == line
+      assert content == line
+    end
+  end
+
+  describe "writing Message structs" do
+    test "with one mention", %{filename: filename} do
+      message = %Getatrex.Message{
+        mentions: ["#: web/templates/layout/top_navigation.html.eex:17"],
+        msgid: "Home",
+        msgstr: "Haus"
+      }
+
+      Getatrex.Writer.write(message)
+
+      content = filename
+      |> get_support_path()
+      |> File.read!()
+
+      assert content == ["", "#: web/templates/layout/top_navigation.html.eex:17", ~s(msgid "Home"), ~s(msgstr "Haus")] |> Enum.join("\n")
+    end
   end
 
 end
