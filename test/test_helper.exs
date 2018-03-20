@@ -7,7 +7,7 @@ defmodule Getatrex.Test.Helper do
   end
 
   def reset_file(filename) do
-    get_support_path(filename) |> File.write!("")
+    filename |> get_support_path() |> File.write!("")
     get_support_path(filename)
   end
 
