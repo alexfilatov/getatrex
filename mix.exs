@@ -5,7 +5,7 @@ defmodule Getatrex.Mixfile do
     [
       app: :getatrex,
       version: "0.1.0",
-      elixir: "~> 1.6.2",
+      elixir: "~> 1.6",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       deps: deps(),
@@ -33,6 +33,7 @@ defmodule Getatrex.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
+      {:gettext, ">= 0.0.0"},
       {:jason, ">= 0.0.0"},
       {:goth, git: "https://github.com/alexfilatov/goth.git"},
       {:gcloudex, git: "https://github.com/alexfilatov/gcloudex.git"},
