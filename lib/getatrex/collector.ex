@@ -25,8 +25,7 @@ defmodule Getatrex.Collector do
   end
 
   def handle_cast({:dispatch_line, "#:" <> tail}, state) do
-    IO.puts "A mention"
-    {:noreply, state}
+    {:noreply, Map.put(state, :mentions, Map.get(state, :mentions) ++ ["#:" <> tail])}
   end
 
   def handle_cast({:dispatch_line, ~s(msgid "") <> tail}, state) do
