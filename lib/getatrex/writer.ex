@@ -43,7 +43,7 @@ defmodule Getatrex.Writer do
   end
 
   def handle_call({:write, line}, _from, state) do
-    {:reply, File.write(state[:filename], line), state}
+    {:reply, IO.write(state[:file_pointer], "#{String.trim(line)}\n"), state}
   end
 
 end

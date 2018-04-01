@@ -1,16 +1,19 @@
 defmodule Getatrex.CollectorTest do
   use ExUnit.Case
-  alias Getatrex.Collector
+  alias Getatrex.{Collector, Writer}
   import Getatrex.Test.Helper
 
-  setup do
-    {:ok, pid} = Getatrex.Collector.start_link()
+  setup context do
+    if context[:writer] do
+      reset_file() |> Writer.start_link()
+    end
 
+    {:ok, pid} = Collector.start_link()
     %{pid: pid}
   end
 
-  test "testing dispatching a mention", %{pid: pid} do
-    Getatrex.Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:17")
+  test "dispatching a mention", %{pid: pid} do
+    Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:17")
     state = :sys.get_state(pid)
 
     assert state == %Getatrex.Message{
@@ -19,7 +22,7 @@ defmodule Getatrex.CollectorTest do
       msgstr: ""
     }
 
-    Getatrex.Collector.dispatch_line("#: web/templates/layout/top_navigation2.html.eex:18")
+    Collector.dispatch_line("#: web/templates/layout/top_navigation2.html.eex:18")
     state = :sys.get_state(pid)
 
     assert state == %Getatrex.Message{
@@ -29,6 +32,17 @@ defmodule Getatrex.CollectorTest do
       msgid: "",
       msgstr: ""
     }
+  end
+
+  @tag :writer
+  test "dispatching a simple line", %{pid: pid} do
+    Collector.dispatch_line("# HELLO, THIS IS COMMENT\n")
+    state = :sys.get_state(pid)
+    assert file_contents == "# HELLO, THIS IS COMMENT\n"
+
+    Collector.dispatch_line("# HELLO, THIS IS COMMENT2\n")
+    state = :sys.get_state(pid)
+    assert file_contents == ["# HELLO, THIS IS COMMENT\n", "# HELLO, THIS IS COMMENT2\n"] |> Enum.join("")
   end
 
 end

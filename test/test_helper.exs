@@ -1,14 +1,20 @@
 ExUnit.start()
 
 defmodule Getatrex.Test.Helper do
-
-  def get_support_path(filename) do
-    "./test/support/#{filename}"
+  def get_support_path do
+    "./test/support/#{filename()}"
   end
 
-  def reset_file(filename) do
-    filename |> get_support_path() |> File.write!("")
-    get_support_path(filename)
+  def reset_file do
+    get_support_path() |> File.write!("")
+    get_support_path()
   end
 
+  def file_contents do
+    get_support_path() |> File.read!()
+  end
+
+  def filename do
+    "filename.txt"
+  end
 end

@@ -44,10 +44,8 @@ defmodule Getatrex.Collector do
   end
 
   def handle_cast({:dispatch_line, line}, state) do
-    IO.puts "Empty meaningless line"
+    Getatrex.Writer.write(line)
     {:noreply, state}
   end
-
-
 
 end
