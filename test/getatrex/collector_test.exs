@@ -37,12 +37,12 @@ defmodule Getatrex.CollectorTest do
   @tag :writer
   test "dispatching a simple line", %{pid: pid} do
     Collector.dispatch_line("# HELLO, THIS IS COMMENT\n")
-    state = :sys.get_state(pid)
-    assert file_contents == "# HELLO, THIS IS COMMENT\n"
+    _state = :sys.get_state(pid)
+    assert file_contents() == "# HELLO, THIS IS COMMENT\n"
 
     Collector.dispatch_line("# HELLO, THIS IS COMMENT2\n")
-    state = :sys.get_state(pid)
-    assert file_contents == ["# HELLO, THIS IS COMMENT\n", "# HELLO, THIS IS COMMENT2\n"] |> Enum.join("")
+    _state = :sys.get_state(pid)
+    assert file_contents() == ["# HELLO, THIS IS COMMENT\n", "# HELLO, THIS IS COMMENT2\n"] |> Enum.join("")
   end
 
 end
