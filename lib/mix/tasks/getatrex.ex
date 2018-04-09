@@ -20,6 +20,10 @@ defmodule Mix.Tasks.Getatrex do
   """
   def run([to_lang | _tail]) do
     Mix.shell.info "Starting..."
+    to_lang
+    |> translated_locale_path_default_po()
+    |> Getatrex.Writer.start_link()
+
     Getatrex.Collector.start_link()
 
     to_lang
@@ -43,7 +47,7 @@ defmodule Mix.Tasks.Getatrex do
     Mix.shell.info ""
     Mix.shell.info "\t$ mix getatrex es"
     Mix.shell.info ""
-    Mix.shell.info "where `es` - target language, to translate to"
+    Mix.shell.info "where `es` - target language (should be created by gettext before getatrex)"
     Mix.shell.info ""
     Mix.shell.info "Please read README.md https://github.com/alexfilatov/getatrex#getting-started"
   end
@@ -53,6 +57,13 @@ defmodule Mix.Tasks.Getatrex do
   """
   def locale_path_default_po(to_lang) do
     "./priv/gettext/#{to_lang}/LC_MESSAGES/default.po"
+  end
+
+  @doc """
+  Returns path for translated locale
+  """
+  def translated_locale_path_default_po(to_lang) do
+    "./priv/gettext/#{to_lang}/LC_MESSAGES/translated_default.po"
   end
 
 end
