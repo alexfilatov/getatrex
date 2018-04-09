@@ -3,6 +3,7 @@ defmodule Getatrex.Collector do
   GenServer
   Collects lines, creates a Message, runs translation, writes to file
   """
+  require Logger
   use GenServer
 
   def start_link do
@@ -19,28 +20,47 @@ defmodule Getatrex.Collector do
   end
 
   # SERVER
-  def handle_cast({:dispatch_line, "##" <> tail = line}, state) do
+  def handle_cast({:dispatch_line, "" = line}, state) do
+    Getatrex.Writer.write(line)
+    {:noreply, %Getatrex.Message{}}
+  end
+
+  def handle_cast({:dispatch_line, "##" <> _tail = line}, state) do
     IO.puts "A comment: #{line}"
+    Getatrex.Writer.write(line)
     {:noreply, state}
   end
 
-  def handle_cast({:dispatch_line, "#:" <> tail}, state) do
-    {:noreply, Map.put(state, :mentions, Map.get(state, :mentions) ++ ["#:" <> tail])}
+  def handle_cast({:dispatch_line, "#:" <> _tail = line}, state) do
+    # IO.inspect state
+    {:noreply, Map.put(state, :mentions, Map.get(state, :mentions) ++ [line])}
   end
 
-  def handle_cast({:dispatch_line, ~s(msgid "") <> tail}, state) do
-    IO.puts "An empty msgid"
+  def handle_cast({:dispatch_line, ~s(msgid "") <> _tail = line}, state) do
+    # IO.inspect state
+    Getatrex.Writer.write(line)
+    {:noreply, %Getatrex.Message{}}
+  end
+
+  def handle_cast({:dispatch_line, ~s(msgid ) <> tail}, state) do
+    [[_, msgid]] = Regex.scan(~r/"(.*?)"/, tail)
+    {:noreply, Map.put(state, :msgid, msgid)}
+  end
+
+  def handle_cast({:dispatch_line, ~s(msgstr "") <> _tail = line}, %{msgid: nil} = state) do
+    Getatrex.Writer.write(line)
     {:noreply, state}
   end
 
-  def handle_cast({:dispatch_line, ~s(msgid ) <> tail = line}, state) do
-    IO.puts "Message to translate: #{line}"
-    {:noreply, state}
-  end
+  def handle_cast({:dispatch_line, ~s(msgstr "") <> _tail}, %{msgid: msgid} = state) do
+    translated_string = case Getatrex.Translator.Google.translate_to_locale(msgid, "de") do
+      {:ok, translated_string} -> translated_string
+      {:error, error} ->
+        Logger.error "Cannot translate [#{msgid}]. Reason: #{inspect error}"
+        ""
+    end
 
-  def handle_cast({:dispatch_line, ~s(msgstr "") <> tail}, state) do
-    IO.puts "An empty translation"
-    {:noreply, state}
+    {:noreply, Map.put(state, :msgstr, translated_string)}
   end
 
   def handle_cast({:dispatch_line, line}, state) do
