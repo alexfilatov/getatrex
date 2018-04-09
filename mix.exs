@@ -40,6 +40,7 @@ defmodule Getatrex.Mixfile do
       {:remix, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, "~> 0.9.0-rc1", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false},
+      {:mock, "~> 0.3.0", only: :test},
       {:excoveralls, "~> 0.8.1", only: :test},
     ]
   end
