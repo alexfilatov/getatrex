@@ -8,6 +8,7 @@ defmodule Getatrex.Writer do
       Getatrex.Writer.write(payload)
       where payload could be simple string or %Getatrex.Message{} struct
   """
+  require Logger
   use GenServer
 
   def start_link(filename) do
@@ -15,7 +16,6 @@ defmodule Getatrex.Writer do
   end
 
   def init(state) do
-
     {:ok, state}
   end
 
@@ -24,27 +24,49 @@ defmodule Getatrex.Writer do
   adds new line in the beginning of the struct
   """
   def write(%Getatrex.Message{} = message) do
-    :ok = GenServer.call(__MODULE__, {:write, message})
+    :ok = GenServer.call(__MODULE__, {:write_message, message})
   end
 
   def write(line) do
-    :ok = GenServer.call(__MODULE__, {:write, line})
+    :ok = GenServer.call(__MODULE__, {:write_line, line})
   end
 
-  def handle_call({:write, %Getatrex.Message{} = message}, _from, state) do
-    message = [
-      "",
-      message.mentions |> Enum.join("\n"),
-      ~s(msgid "#{message.msgid}"),
-      ~s(msgstr "#{message.msgstr}")
+  def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgstr: msgstr}}, _from, state)
+  when mentions == [] or is_nil(mentions) do
+    message_string = [
+      ~s(msgid "#{msgid}"),
+      ~s(msgstr "#{msgstr}")
     ]
     |> Enum.join("\n")
 
-    {:reply, File.write(state[:filename], message), state}
+    IO.write(state[:file_pointer], message_string <> "\n\n")
+
+    {:reply, :ok, state}
   end
 
-  def handle_call({:write, line}, _from, state) do
-    {:reply, IO.write(state[:file_pointer], "#{String.trim(line)}\n"), state}
+  def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgstr: msgstr}}, _from, state) do
+    message_list = [
+      mentions_string(mentions),
+      ~s(msgid "#{msgid}"),
+      ~s(msgstr "#{msgstr}")
+    ]
+
+    message_string = message_list |> Enum.join("\n")
+    IO.write(state[:file_pointer], message_string <> "\n\n")
+
+    {:reply, :ok, state}
+  end
+
+  def handle_call({:write_message, message}, _from, state) do
+    {:reply, {:error, message}, state}
+  end
+
+  def handle_call({:write_line, line}, _from, state) do
+    {:reply, IO.write(state[:file_pointer], String.trim(line) <> "\n"), state}
+  end
+
+  defp mentions_string(mentions) do
+    mentions |> Enum.join("\n")
   end
 
 end

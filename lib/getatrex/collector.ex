@@ -16,43 +16,46 @@ defmodule Getatrex.Collector do
 
   # API
   def dispatch_line(line) do
-    GenServer.cast(__MODULE__, {:dispatch_line, line})
+    :ok = GenServer.call(__MODULE__, {:dispatch_line, String.trim(line)})
   end
 
   # SERVER
-  def handle_cast({:dispatch_line, "" = line}, state) do
+  def handle_call({:dispatch_line, "" = line}, _from, %{msgid: nil, msgstr: nil} = state) do
     Getatrex.Writer.write(line)
-    {:noreply, %Getatrex.Message{}}
+    {:reply, :ok, %Getatrex.Message{}}
   end
 
-  def handle_cast({:dispatch_line, "##" <> _tail = line}, state) do
-    IO.puts "A comment: #{line}"
+  def handle_call({:dispatch_line, "" = line}, _from, %{msgid: msgid, msgstr: msgstr} = state) do
+    Getatrex.Writer.write(state)
+    {:reply, :ok, %Getatrex.Message{}}
+  end
+
+  def handle_call({:dispatch_line, "##" <> _tail = line}, _from, state) do
     Getatrex.Writer.write(line)
-    {:noreply, state}
+    {:reply, :ok, state}
   end
 
-  def handle_cast({:dispatch_line, "#:" <> _tail = line}, state) do
-    # IO.inspect state
-    {:noreply, Map.put(state, :mentions, Map.get(state, :mentions) ++ [line])}
+  def handle_call({:dispatch_line, "#:" <> _tail = line}, _from, state) do
+    {:reply, :ok, Map.put(state, :mentions, Map.get(state, :mentions) ++ [line])}
   end
 
-  def handle_cast({:dispatch_line, ~s(msgid "") <> _tail = line}, state) do
-    # IO.inspect state
+  def handle_call({:dispatch_line, ~s(msgid "") <> _tail = line}, _from, state) do
     Getatrex.Writer.write(line)
-    {:noreply, %Getatrex.Message{}}
+    {:reply, :ok, %Getatrex.Message{}}
   end
 
-  def handle_cast({:dispatch_line, ~s(msgid ) <> tail}, state) do
+  def handle_call({:dispatch_line, ~s(msgid ) <> tail}, _from, state) do
     [[_, msgid]] = Regex.scan(~r/"(.*?)"/, tail)
-    {:noreply, Map.put(state, :msgid, msgid)}
+    {:reply, :ok, Map.put(state, :msgid, msgid)}
   end
 
-  def handle_cast({:dispatch_line, ~s(msgstr "") <> _tail = line}, %{msgid: nil} = state) do
+  def handle_call({:dispatch_line, ~s(msgstr "") <> _tail = line}, _from, %{msgid: nil} = state) do
     Getatrex.Writer.write(line)
-    {:noreply, state}
+    {:reply, :ok, state}
   end
 
-  def handle_cast({:dispatch_line, ~s(msgstr "") <> _tail}, %{msgid: msgid} = state) do
+  # TODO: removed hardcoded lang
+  def handle_call({:dispatch_line, ~s(msgstr "") <> _tail}, _from, %{msgid: msgid} = state) do
     translated_string = case Getatrex.Translator.Google.translate_to_locale(msgid, "de") do
       {:ok, translated_string} -> translated_string
       {:error, error} ->
@@ -60,12 +63,12 @@ defmodule Getatrex.Collector do
         ""
     end
 
-    {:noreply, Map.put(state, :msgstr, translated_string)}
+    {:reply, :ok, Map.put(state, :msgstr, translated_string)}
   end
 
-  def handle_cast({:dispatch_line, line}, state) do
+  def handle_call({:dispatch_line, line}, _from, state) do
     Getatrex.Writer.write(line)
-    {:noreply, state}
+    {:reply, :ok, state}
   end
 
 end
