@@ -20,6 +20,7 @@ defmodule Mix.Tasks.Getatrex do
   """
   def run([to_lang | _tail]) do
     Mix.shell.info "Starting..."
+
     to_lang
     |> translated_locale_path_default_po()
     |> Getatrex.Writer.start_link()
@@ -36,6 +37,8 @@ defmodule Mix.Tasks.Getatrex do
       Getatrex.Collector.dispatch_line(line)
     end)
     |> Stream.run()
+
+    Getatrex.Collector.dispatch_line("")
 
     Mix.shell.info "Done!"
   end

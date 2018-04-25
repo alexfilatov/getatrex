@@ -11,6 +11,9 @@ defmodule Getatrex.Collector do
   end
 
   def init(state) do
+    # starting Goth
+    {:ok, _started} = Application.ensure_all_started(:goth)
+
     {:ok, state}
   end
 
@@ -45,7 +48,7 @@ defmodule Getatrex.Collector do
   end
 
   def handle_call({:dispatch_line, ~s(msgid ) <> tail}, _from, state) do
-    [[_, msgid]] = Regex.scan(~r/"(.*?)"/, tail)
+    [[_, msgid]] = Regex.scan(~r/^"(.*?)"$/, tail)
     {:reply, :ok, Map.put(state, :msgid, msgid)}
   end
 
@@ -56,12 +59,13 @@ defmodule Getatrex.Collector do
 
   # TODO: removed hardcoded lang
   def handle_call({:dispatch_line, ~s(msgstr "") <> _tail}, _from, %{msgid: msgid} = state) do
-    translated_string = case Getatrex.Translator.Google.translate_to_locale(msgid, "de") do
-      {:ok, translated_string} -> translated_string
-      {:error, error} ->
-        Logger.error "Cannot translate [#{msgid}]. Reason: #{inspect error}"
-        ""
-    end
+    translated_string =
+      case String.trim(msgid) |> Getatrex.Translator.Google.translate_to_locale("de") do
+        {:ok, translated_string} -> translated_string
+        {:error, error} ->
+          Logger.error "Cannot translate [#{msgid}]. Reason: #{inspect error}"
+          ""
+      end
 
     {:reply, :ok, Map.put(state, :msgstr, translated_string)}
   end

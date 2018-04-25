@@ -12,7 +12,7 @@ defmodule Getatrex.Writer do
   use GenServer
 
   def start_link(filename) do
-    GenServer.start_link(__MODULE__, %{filename: filename, file_pointer: File.open!(filename, [:write])}, name: __MODULE__)
+    GenServer.start_link(__MODULE__, %{filename: filename, file_pointer: File.open!(filename, [:write, :utf8])}, name: __MODULE__)
   end
 
   def init(state) do
@@ -45,6 +45,8 @@ defmodule Getatrex.Writer do
   end
 
   def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgstr: msgstr}}, _from, state) do
+    msgstr = cleanup(msgstr)
+
     message_list = [
       mentions_string(mentions),
       ~s(msgid "#{msgid}"),
@@ -67,6 +69,11 @@ defmodule Getatrex.Writer do
 
   defp mentions_string(mentions) do
     mentions |> Enum.join("\n")
+  end
+
+  defp cleanup(str) do
+    str
+    |> String.replace("% {", " %{")
   end
 
 end
