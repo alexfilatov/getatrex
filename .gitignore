@@ -19,7 +19,7 @@ erl_crash.dump
 # Also ignore archive artifacts (built via "mix archive.build").
 *.ez
 
-config/creds_dev.json
+goth_credentials.json
 .idea
 filename.txt
 /priv
