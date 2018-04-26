@@ -19,8 +19,28 @@ defmodule Mix.Tasks.Getatrex do
   8.
   """
   def run([to_lang | _tail]) do
-    Mix.shell.info "Starting..."
+    # checking whether local exists and run if file exists
+    to_lang
+    |> locale_path_default_po()
+    |> File.exists?()
+    |> run_with_file(to_lang)
+  end
 
+  def run_with_file(file_exists, to_lang) when file_exists == false or file_exists == nil do
+    Mix.shell.info "Warning!"
+    Mix.shell.info "Locale filename #{locale_path_default_po(to_lang)} does not exists."
+    Mix.shell.info "Please create '#{to_lang}' locale with gettext first:"
+    Mix.shell.info "Follow the instructions:"
+    Mix.shell.info ""
+    Mix.shell.info "$ mix gettext.extract"
+    Mix.shell.info "$ mix gettext.merge priv/gettext"
+    Mix.shell.info "$ mix gettext.merge priv/gettext --locale #{to_lang}"
+    Mix.shell.info ""
+    Mix.shell.info "More info here: https://github.com/elixir-lang/gettext#workflow"
+  end
+
+  def run_with_file(true, to_lang) do
+    Mix.shell.info "Starting translation gettext locale #{to_lang}"
     to_lang
     |> translated_locale_path_default_po()
     |> Getatrex.Writer.start_link()
@@ -39,7 +59,6 @@ defmodule Mix.Tasks.Getatrex do
     |> Stream.run()
 
     Getatrex.Collector.dispatch_line("")
-
     Mix.shell.info "Done!"
   end
 
