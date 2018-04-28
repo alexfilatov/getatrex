@@ -6,3 +6,6 @@ Overloaded contract for 'Elixir.Getatrex.Translator.Google':languages/1 has over
 Overloaded contract for 'Elixir.Getatrex.Translator.Google':detect/1 has overlapping domains;
 Overloaded contract for 'Elixir.Getatrex.Translator.Google':request/4 has overlapping domains;
 Overloaded contract for 'Elixir.Getatrex.Translator.Google':translate/1 has overlapping domains;
+:0: Unknown function 'Elixir.Mix':shell/0
+:0: Unknown type 'Elixir.HTTPResponse':t/0
+:0: Unknown type 'Elixir.HTTPoison.HTTPResponse':t/0

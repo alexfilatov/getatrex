@@ -45,7 +45,7 @@ defmodule Mix.Tasks.Getatrex do
     |> translated_locale_path_default_po()
     |> Getatrex.Writer.start_link()
 
-    Getatrex.Collector.start_link()
+    Getatrex.Collector.start_link(to_lang)
 
     to_lang
     |> locale_path_default_po()
