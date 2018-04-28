@@ -48,6 +48,7 @@ defmodule Getatrex.Mixfile do
       {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false},
       {:mock, "~> 0.3.0", only: :test},
       {:excoveralls, "~> 0.8.1", only: :test},
+      {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 
