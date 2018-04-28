@@ -42,7 +42,7 @@ defmodule Getatrex.Mixfile do
     [
       {:gettext, "~> 0.15.0"},
       {:jason, "~> 1.0.0"},
-      {:goth, ">= 0.0.0", override: true},
+      {:goth, ">= 0.0.0"},
       {:remix, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, "~> 0.9.0-rc1", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false},
