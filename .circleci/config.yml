@@ -39,7 +39,7 @@ jobs:
             - _build
             - ~/.mix
       - run: mix dialyzer --halt-exit-status
-      - run: mix credo
+      - run: mix credo --only warning
       - run: mix test
 test:
   override:
