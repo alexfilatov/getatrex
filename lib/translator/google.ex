@@ -15,9 +15,6 @@ defmodule Getatrex.Translator.Google do
         |> Jason.decode!()
         |> (fn(decoded) -> decoded["data"]["translations"] end).()
         |> (fn(translations) -> translations |> List.first() end).()
-
-        IO.puts "first[translatedText]: #{first["translatedText"]}"
-
       {:ok, first["translatedText"]}
     else
       error -> {:error, error}

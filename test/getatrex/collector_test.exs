@@ -20,8 +20,8 @@ defmodule Getatrex.CollectorTest do
 
     assert state == %Getatrex.Message{
       mentions: ["#: web/templates/layout/top_navigation.html.eex:17"],
-      msgid: "",
-      msgstr: ""
+      msgid: nil,
+      msgstr: nil
     }
 
     Collector.dispatch_line("#: web/templates/layout/top_navigation2.html.eex:18")
@@ -31,8 +31,8 @@ defmodule Getatrex.CollectorTest do
       mentions: [
         "#: web/templates/layout/top_navigation.html.eex:17",
         "#: web/templates/layout/top_navigation2.html.eex:18"],
-      msgid: "",
-      msgstr: ""
+      msgid: nil,
+      msgstr: nil
     }
   end
 
@@ -161,6 +161,26 @@ defmodule Getatrex.CollectorTest do
           "",
           ] |> Enum.join("\n")
           ) <> "\n"
+      end
+    end
+    @tag :writer
+    test "language block", %{pid: pid} do
+      with_mock Getatrex.Translator.Google, [:passthrough], [translate_to_locale: fn(_text, _locale) -> {:ok, "TRANSLATED STRING"} end] do
+        Collector.dispatch_line("## Use `mix gettext.extract --merge` or `mix gettext.merge`")
+        Collector.dispatch_line("## to merge POT files into PO files.")
+        Collector.dispatch_line(~s(msgid ""))
+        Collector.dispatch_line(~s(msgstr ""))
+        Collector.dispatch_line(~s("Language: de\n"))
+
+        assert file_contents() == ([
+          ~s(## Use `mix gettext.extract --merge` or `mix gettext.merge`),
+          ~s(## to merge POT files into PO files.),
+          ~s(msgid ""),
+          ~s(msgstr ""),
+          ~s("Language: de\n"),
+          "",
+          ] |> Enum.join("\n")
+          )
       end
     end
   end

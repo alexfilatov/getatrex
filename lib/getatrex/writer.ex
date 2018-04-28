@@ -45,8 +45,6 @@ defmodule Getatrex.Writer do
   end
 
   def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgstr: msgstr}}, _from, state) do
-    msgstr = cleanup(msgstr)
-
     message_list = [
       mentions_string(mentions),
       ~s(msgid "#{msgid}"),
@@ -70,10 +68,4 @@ defmodule Getatrex.Writer do
   defp mentions_string(mentions) do
     mentions |> Enum.join("\n")
   end
-
-  defp cleanup(str) do
-    str
-    |> String.replace("% {", " %{")
-  end
-
 end
