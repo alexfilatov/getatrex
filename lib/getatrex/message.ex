@@ -11,6 +11,6 @@ defmodule Getatrex.Message do
   where comments (lines starts with `#:`) will go to `mentions`,
   msgid and msgstr - to corresponding keys
   """
-  defstruct mentions: [], msgid: nil, msgstr: nil
-  @type t :: %__MODULE__{mentions: Enum.t, msgid: String.t, msgstr: String.t}
+  defstruct mentions: [], msgid: nil, msgstr: nil, to_lang: nil
+  @type t :: %__MODULE__{mentions: Enum.t, msgid: String.t, msgstr: String.t, to_lang: String.t}
 end

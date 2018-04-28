@@ -24,7 +24,8 @@ defmodule Getatrex.WriterTest do
       message = %Getatrex.Message{
         mentions: ["#: web/templates/layout/top_navigation.html.eex:17"],
         msgid: "Home",
-        msgstr: "Haus"
+        msgstr: "Haus",
+        to_lang: "de"
       }
 
       Writer.write(message)
@@ -45,7 +46,8 @@ defmodule Getatrex.WriterTest do
           "#: web/templates/layout/top_navigation.html.eex:19"
         ],
         msgid: "Home",
-        msgstr: "Haus"
+        msgstr: "Haus",
+        to_lang: "de"
       }
 
       Writer.write(message)

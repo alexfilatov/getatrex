@@ -6,8 +6,8 @@ defmodule Getatrex.Collector do
   require Logger
   use GenServer
 
-  def start_link do
-    GenServer.start_link(__MODULE__, %Getatrex.Message{}, name: __MODULE__)
+  def start_link(to_lang) do
+    GenServer.start_link(__MODULE__, %Getatrex.Message{to_lang: to_lang}, name: __MODULE__)
   end
 
   def init(state) do
@@ -28,7 +28,7 @@ defmodule Getatrex.Collector do
   """
   def handle_call({:dispatch_line, "" = line}, _from, %{msgid: nil, msgstr: nil} = state) do
     Getatrex.Writer.write(line)
-    {:reply, :ok, %Getatrex.Message{}}
+    {:reply, :ok, %Getatrex.Message{to_lang: state.to_lang}}
   end
 
   @doc """
@@ -36,7 +36,7 @@ defmodule Getatrex.Collector do
   """
   def handle_call({:dispatch_line, "" = line}, _from, %{msgid: msgid, msgstr: msgstr} = state) do
     Getatrex.Writer.write(state)
-    {:reply, :ok, %Getatrex.Message{}}
+    {:reply, :ok, %Getatrex.Message{to_lang: state.to_lang}}
   end
 
   @doc """
@@ -59,7 +59,7 @@ defmodule Getatrex.Collector do
   """
   def handle_call({:dispatch_line, ~s(msgid "") <> _tail = line}, _from, state) do
     Getatrex.Writer.write(line)
-    {:reply, :ok, %Getatrex.Message{}}
+    {:reply, :ok, %Getatrex.Message{to_lang: state.to_lang}}
   end
 
   def handle_call({:dispatch_line, ~s(msgstr "") <> _tail = line}, _from, %{msgid: nil} = state) do
@@ -75,7 +75,7 @@ defmodule Getatrex.Collector do
   # TODO: removed hardcoded lang
   def handle_call({:dispatch_line, ~s(msgstr "") <> _tail}, _from, %{msgid: msgid} = state) do
     translated_string =
-      case prepare_string(msgid) |> Getatrex.Translator.Google.translate_to_locale("de") do
+      case prepare_string(msgid) |> Getatrex.Translator.Google.translate_to_locale(state.to_lang) do
         {:ok, translated_string} -> revert_string(translated_string)
         {:error, error} ->
           Logger.error "Cannot translate [#{msgid}]. Reason: #{inspect error}"

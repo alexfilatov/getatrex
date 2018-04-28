@@ -10,7 +10,7 @@ defmodule Getatrex.CollectorTest do
     end
     # Goth.Supervisor.start_link
 
-    {:ok, pid} = Collector.start_link()
+    {:ok, pid} = Collector.start_link("de")
     %{pid: pid}
   end
 
@@ -21,7 +21,8 @@ defmodule Getatrex.CollectorTest do
     assert state == %Getatrex.Message{
       mentions: ["#: web/templates/layout/top_navigation.html.eex:17"],
       msgid: nil,
-      msgstr: nil
+      msgstr: nil,
+      to_lang: "de"
     }
 
     Collector.dispatch_line("#: web/templates/layout/top_navigation2.html.eex:18")
@@ -32,7 +33,8 @@ defmodule Getatrex.CollectorTest do
         "#: web/templates/layout/top_navigation.html.eex:17",
         "#: web/templates/layout/top_navigation2.html.eex:18"],
       msgid: nil,
-      msgstr: nil
+      msgstr: nil,
+      to_lang: "de"
     }
   end
 
