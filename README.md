@@ -53,3 +53,4 @@ Now you have new file created `translated_default.po` with translations, you can
 
 1. Write translations to original default.po to avoid this copy-paste step
 2. Implement plurals
+3. Translate errors.po
