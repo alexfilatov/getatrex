@@ -165,6 +165,7 @@ defmodule Getatrex.CollectorTest do
           ) <> "\n"
       end
     end
+
     @tag :writer
     test "language block", %{pid: pid} do
       with_mock Getatrex.Translator.Google, [:passthrough], [translate_to_locale: fn(_text, _locale) -> {:ok, "TRANSLATED STRING"} end] do
@@ -184,6 +185,22 @@ defmodule Getatrex.CollectorTest do
           ] |> Enum.join("\n")
           )
       end
+    end
+
+    @tag :writer
+    test "already translated block", %{pid: pid} do
+      Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:19")
+      Collector.dispatch_line(~s(msgid "Here is one string to translate"))
+      Collector.dispatch_line(~s(msgstr "Translated line"))
+      Collector.dispatch_line("")
+
+      assert file_contents() == ([
+          ~s(#: web/templates/layout/top_navigation.html.eex:19),
+          ~s(msgid "Here is one string to translate"),
+          ~s(msgstr "Translated line"),
+          "",
+        ] |> Enum.join("\n")
+      ) <> "\n"
     end
   end
 

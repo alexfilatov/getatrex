@@ -72,7 +72,6 @@ defmodule Getatrex.Collector do
     {:reply, :ok, Map.put(state, :msgid, msgid)}
   end
 
-  # TODO: removed hardcoded lang
   def handle_call({:dispatch_line, ~s(msgstr "") <> _tail}, _from, %{msgid: msgid} = state) do
     translated_string =
       case prepare_string(msgid) |> Getatrex.Translator.Google.translate_to_locale(state.to_lang) do
@@ -83,6 +82,11 @@ defmodule Getatrex.Collector do
       end
 
     {:reply, :ok, Map.put(state, :msgstr, translated_string)}
+  end
+
+  def handle_call({:dispatch_line, ~s(msgstr ) <> tail}, _from, %{msgid: msgid} = state) do
+    [[_, msgstr]] = Regex.scan(~r/^"(.*?)"$/, tail)
+    {:reply, :ok, Map.put(state, :msgstr, msgstr)}
   end
 
   def handle_call({:dispatch_line, line}, _from, state) do
