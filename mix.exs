@@ -41,7 +41,7 @@ defmodule Getatrex.Mixfile do
   defp deps do
     [
       {:gettext, "~> 0.15.0"},
-      {:jason, "~> 1.0.0"},
+      {:jason, "~> 1.1.2"},
       {:goth, ">= 0.0.0"},
       {:remix, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, "~> 0.9.0-rc1", only: [:dev, :test], runtime: false},
