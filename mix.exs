@@ -40,7 +40,7 @@ defmodule Getatrex.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:gettext, "~> 0.15.0"},
+      {:gettext, "~> 0.17.0"},
       {:jason, "~> 1.1.2"},
       {:goth, ">= 0.0.0"},
       {:remix, ">= 0.0.0", only: :dev, runtime: false},
