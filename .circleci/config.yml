@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       # Bump cache key version below when changing elixir version
-      - image: circleci/elixir:1.6.2
+      - image: circleci/elixir:1.9
     environment:
       - MIX_ENV: test
     # resource_class: medium+
