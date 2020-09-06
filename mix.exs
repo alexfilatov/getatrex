@@ -7,7 +7,7 @@ defmodule Getatrex.Mixfile do
     [
       app: :getatrex,
       version: @version,
-      elixir: "~> 1.6",
+      elixir: "~> 1.9",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       deps: deps(),
@@ -40,15 +40,15 @@ defmodule Getatrex.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:gettext, "~> 0.17.0"},
-      {:jason, "~> 1.1.2"},
-      {:goth, ">= 0.0.0"},
-      {:remix, ">= 0.0.0", only: :dev, runtime: false},
-      {:credo, "~> 0.9.0-rc1", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 0.5", only: [:dev, :test], runtime: false},
-      {:mock, "~> 0.3.0", only: :test},
-      {:excoveralls, "~> 0.8.1", only: :test},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:gettext, "~> 0.18"},
+      {:jason, "~> 1.2"},
+      {:goth, "~> 1.2"},
+      {:remix, "~> 0.0.2", only: :dev, runtime: false},
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:mock, "~> 0.3", only: :test},
+      {:excoveralls, "~> 0.13", only: :test},
+      {:ex_doc, "~> 0.22", only: :dev}
     ]
   end
 
