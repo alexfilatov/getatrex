@@ -31,7 +31,38 @@ defmodule Getatrex.Writer do
     :ok = GenServer.call(__MODULE__, {:write_line, line})
   end
 
-  def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgstr: msgstr}}, _from, state)
+  def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgid_plural: msgid_plural, msgstr: msgstr, msgstr0: msgstr0, msgstr1: msgstr1}}, _from, state)
+  when is_nil(msgstr1) == false and mentions == [] or is_nil(mentions) do
+    message_string = [
+      ~s(msgid "#{msgid}"),
+      ~s(msgid_plural "#{msgid_plural}"),
+      ~s(msgstr[0] "#{msgstr0}"),
+      ~s(msgstr[1] "#{msgstr1}")
+    ]
+    |> Enum.join("\n")
+
+    IO.write(state[:file_pointer], message_string <> "\n\n")
+
+    {:reply, :ok, state}
+  end
+
+  def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgid_plural: msgid_plural, msgstr0: msgstr0, msgstr1: msgstr1}}, _from, state)
+  when is_nil(msgstr1) == false  do
+    message_list = [
+      mentions_string(mentions),
+      ~s(msgid "#{msgid}"),
+      ~s(msgid_plural "#{msgid_plural}"),
+      ~s(msgstr[0] "#{msgstr0}"),
+      ~s(msgstr[1] "#{msgstr1}")
+    ]
+
+    message_string = message_list |> Enum.join("\n")
+    IO.write(state[:file_pointer], message_string <> "\n\n")
+
+    {:reply, :ok, state}
+  end
+
+  def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgstr: msgstr, msgstr0: msgstr0}}, _from, state)
   when mentions == [] or is_nil(mentions) do
     message_string = [
       ~s(msgid "#{msgid}"),
@@ -44,7 +75,7 @@ defmodule Getatrex.Writer do
     {:reply, :ok, state}
   end
 
-  def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgstr: msgstr}}, _from, state) do
+  def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgstr: msgstr, msgstr0: msgstr0}}, _from, state) do
     message_list = [
       mentions_string(mentions),
       ~s(msgid "#{msgid}"),
