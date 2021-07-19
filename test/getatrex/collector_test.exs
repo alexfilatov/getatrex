@@ -22,7 +22,9 @@ defmodule Getatrex.CollectorTest do
       mentions: ["#: web/templates/layout/top_navigation.html.eex:17"],
       msgid: nil,
       msgstr: nil,
-      to_lang: "de"
+      to_lang: "de",
+      request_mode: :post,
+      api_key: nil
     }
 
     Collector.dispatch_line("#: web/templates/layout/top_navigation2.html.eex:18")
@@ -34,7 +36,9 @@ defmodule Getatrex.CollectorTest do
         "#: web/templates/layout/top_navigation2.html.eex:18"],
       msgid: nil,
       msgstr: nil,
-      to_lang: "de"
+      to_lang: "de",
+      request_mode: :post,
+      api_key: nil
     }
   end
 
@@ -67,11 +71,11 @@ defmodule Getatrex.CollectorTest do
     # 1. assert called translator
     # 2. assert result of translation
     # 2.1 correct translation
-    with_mock Getatrex.Translator.Google, [translate_to_locale: fn(_text, _locale) -> {:ok, "TRANSLATED STRING"} end] do
+    with_mock Getatrex.Translator.Google, [translate_to_locale: fn(_text, _locale, :post, nil) -> {:ok, "TRANSLATED STRING"} end] do
       Collector.dispatch_line(~s(msgstr ""\n))
       state = :sys.get_state(pid)
 
-      assert called Getatrex.Translator.Google.translate_to_locale("Here is one string to translate", "de")
+      assert called Getatrex.Translator.Google.translate_to_locale("Here is one string to translate", "de", :post, nil)
       assert state.msgstr == "TRANSLATED STRING"
     end
   end
@@ -82,11 +86,11 @@ defmodule Getatrex.CollectorTest do
     state = :sys.get_state(pid)
     assert state.msgid == "Here is one string to translate"
 
-    with_mock Getatrex.Translator.Google, [translate_to_locale: fn(_text, _locale) -> {:error, :some_error} end] do
+    with_mock Getatrex.Translator.Google, [translate_to_locale: fn(_text, _locale, :post, nil) -> {:error, :some_error} end] do
       Collector.dispatch_line(~s(msgstr ""\n))
       state = :sys.get_state(pid)
 
-      assert called Getatrex.Translator.Google.translate_to_locale("Here is one string to translate", "de")
+      assert called Getatrex.Translator.Google.translate_to_locale("Here is one string to translate", "de", :post, nil)
       assert state.msgstr == ""
     end
   end
@@ -94,7 +98,7 @@ defmodule Getatrex.CollectorTest do
   describe "writing message" do
     @tag :writer
     test "writing entire simple message", %{pid: pid} do
-      with_mock Getatrex.Translator.Google, [translate_to_locale: fn(_text, _locale) -> {:ok, "TRANSLATED STRING"} end] do
+      with_mock Getatrex.Translator.Google, [translate_to_locale: fn(_text, _locale, :post, nil) -> {:ok, "TRANSLATED STRING"} end] do
         Collector.dispatch_line(~s(msgid "Here is one string to translate"))
         Collector.dispatch_line(~s(msgstr ""))
         Collector.dispatch_line("")
@@ -111,7 +115,7 @@ defmodule Getatrex.CollectorTest do
 
     @tag :writer
     test "writing entire simple message with mentions", %{pid: pid} do
-      with_mock Getatrex.Translator.Google, [:passthrough], [translate_to_locale: fn(_text, _locale) -> {:ok, "TRANSLATED STRING"} end] do
+      with_mock Getatrex.Translator.Google, [:passthrough], [translate_to_locale: fn(_text, _locale, :post, nil) -> {:ok, "TRANSLATED STRING"} end] do
         Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:17")
         Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:18")
         Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:19")
@@ -133,7 +137,7 @@ defmodule Getatrex.CollectorTest do
 
     @tag :writer
     test "writing two blocks", %{pid: pid} do
-      with_mock Getatrex.Translator.Google, [:passthrough], [translate_to_locale: fn(_text, _locale) -> {:ok, "TRANSLATED STRING"} end] do
+      with_mock Getatrex.Translator.Google, [:passthrough], [translate_to_locale: fn(_text, _locale, :post, nil) -> {:ok, "TRANSLATED STRING"} end] do
         Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:17")
         Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:18")
         Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:19")
@@ -168,7 +172,7 @@ defmodule Getatrex.CollectorTest do
 
     @tag :writer
     test "language block", %{pid: pid} do
-      with_mock Getatrex.Translator.Google, [:passthrough], [translate_to_locale: fn(_text, _locale) -> {:ok, "TRANSLATED STRING"} end] do
+      with_mock Getatrex.Translator.Google, [:passthrough], [translate_to_locale: fn(_text, _locale, :post, nil) -> {:ok, "TRANSLATED STRING"} end] do
         Collector.dispatch_line("## Use `mix gettext.extract --merge` or `mix gettext.merge`")
         Collector.dispatch_line("## to merge POT files into PO files.")
         Collector.dispatch_line(~s(msgid ""))
