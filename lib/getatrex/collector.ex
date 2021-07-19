@@ -7,11 +7,16 @@ defmodule Getatrex.Collector do
   use GenServer
 
   def start_link(to_lang) do
-    GenServer.start_link(__MODULE__, %Getatrex.Message{to_lang: to_lang}, name: __MODULE__)
+    start_link(to_lang, :post, nil)
+  end
+
+  def start_link(to_lang, request_mode, api_key) do
+    GenServer.start_link(__MODULE__, %Getatrex.Message{to_lang: to_lang, request_mode: request_mode, api_key: api_key}, name: __MODULE__)
   end
 
   def init(state) do
-    # starting Goth
+    # starting Hackney and Goth
+    {:ok, _started} = Application.ensure_all_started(:hackney)
     {:ok, _started} = Application.ensure_all_started(:goth)
 
     {:ok, state}
@@ -28,7 +33,7 @@ defmodule Getatrex.Collector do
   """
   def handle_call({:dispatch_line, "" = line}, _from, %{msgid: nil, msgstr: nil} = state) do
     Getatrex.Writer.write(line)
-    {:reply, :ok, %Getatrex.Message{to_lang: state.to_lang}}
+    {:reply, :ok, %Getatrex.Message{to_lang: state.to_lang, request_mode: state.request_mode, api_key: state.api_key}}
   end
 
   @doc """
@@ -36,7 +41,7 @@ defmodule Getatrex.Collector do
   """
   def handle_call({:dispatch_line, "" = line}, _from, %{msgid: msgid, msgstr: msgstr} = state) do
     Getatrex.Writer.write(state)
-    {:reply, :ok, %Getatrex.Message{to_lang: state.to_lang}}
+    {:reply, :ok, %Getatrex.Message{to_lang: state.to_lang, request_mode: state.request_mode, api_key: state.api_key}}
   end
 
   @doc """
@@ -59,7 +64,7 @@ defmodule Getatrex.Collector do
   """
   def handle_call({:dispatch_line, ~s(msgid "") <> _tail = line}, _from, state) do
     Getatrex.Writer.write(line)
-    {:reply, :ok, %Getatrex.Message{to_lang: state.to_lang}}
+    {:reply, :ok, %Getatrex.Message{to_lang: state.to_lang, request_mode: state.request_mode, api_key: state.api_key}}
   end
 
   def handle_call({:dispatch_line, ~s(msgstr "") <> _tail = line}, _from, %{msgid: nil} = state) do
