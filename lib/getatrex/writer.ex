@@ -31,14 +31,19 @@ defmodule Getatrex.Writer do
     :ok = GenServer.call(__MODULE__, {:write_line, line})
   end
 
-  def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgid_plural: msgid_plural, msgstr: msgstr, msgstr0: msgstr0, msgstr1: msgstr1}}, _from, state)
+  def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgid_plural: msgid_plural, msgstr: msgstr, msgstr0: msgstr0, msgstr1: msgstr1, msgstr2: msgstr2, msgstr3: msgstr3, msgstr4: msgstr4, msgstr5: msgstr5}}, _from, state)
   when is_nil(msgstr1) == false and mentions == [] or is_nil(mentions) do
     message_string = [
       ~s(msgid "#{msgid}"),
       ~s(msgid_plural "#{msgid_plural}"),
       ~s(msgstr[0] "#{msgstr0}"),
-      ~s(msgstr[1] "#{msgstr1}")
+      ~s(msgstr[1] "#{msgstr1}"),
+      if(is_nil(msgstr2), do: nil, else: ~s(msgstr[2] "#{msgstr2}")),
+      if(is_nil(msgstr3), do: nil, else: ~s(msgstr[3] "#{msgstr3}")),
+      if(is_nil(msgstr4), do: nil, else: ~s(msgstr[4] "#{msgstr4}")),
+      if(is_nil(msgstr5), do: nil, else: ~s(msgstr[5] "#{msgstr5}"))
     ]
+    |> Enum.filter(fn el -> !is_nil(el) end)
     |> Enum.join("\n")
 
     IO.write(state[:file_pointer], message_string <> "\n\n")
@@ -46,15 +51,20 @@ defmodule Getatrex.Writer do
     {:reply, :ok, state}
   end
 
-  def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgid_plural: msgid_plural, msgstr0: msgstr0, msgstr1: msgstr1}}, _from, state)
+  def handle_call({:write_message, %{mentions: mentions, msgid: msgid, msgid_plural: msgid_plural, msgstr0: msgstr0, msgstr1: msgstr1, msgstr2: msgstr2, msgstr3: msgstr3, msgstr4: msgstr4, msgstr5: msgstr5}}, _from, state)
   when is_nil(msgstr1) == false  do
     message_list = [
       mentions_string(mentions),
       ~s(msgid "#{msgid}"),
       ~s(msgid_plural "#{msgid_plural}"),
       ~s(msgstr[0] "#{msgstr0}"),
-      ~s(msgstr[1] "#{msgstr1}")
+      ~s(msgstr[1] "#{msgstr1}"),
+      if(is_nil(msgstr2), do: nil, else: ~s(msgstr[2] "#{msgstr2}")),
+      if(is_nil(msgstr3), do: nil, else: ~s(msgstr[3] "#{msgstr3}")),
+      if(is_nil(msgstr4), do: nil, else: ~s(msgstr[4] "#{msgstr4}")),
+      if(is_nil(msgstr5), do: nil, else: ~s(msgstr[5] "#{msgstr5}"))
     ]
+    |> Enum.filter(fn el -> !is_nil(el) end)
 
     message_string = message_list |> Enum.join("\n")
     IO.write(state[:file_pointer], message_string <> "\n\n")

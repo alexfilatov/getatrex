@@ -102,6 +102,58 @@ defmodule Getatrex.Collector do
     {:reply, :ok, Map.put(state, :msgstr, translated_string)}
   end
 
+# msgstr[5]
+  def handle_call({:dispatch_line, ~s(msgstr[5] "") <> _tail}, _from, %{msgid_plural: msgid_plural} = state) do
+    translated_string =
+      case prepare_string(msgid_plural) |> Getatrex.Translator.Google.translate_to_locale(state.to_lang, state.request_mode, state.api_key) do
+        {:ok, translated_string} -> revert_string(translated_string)
+        {:error, error} ->
+          Logger.error "Cannot translate [#{msgid_plural}]. Reason: #{inspect error}"
+          ""
+      end
+
+    {:reply, :ok, Map.put(state, :msgstr5, translated_string)}
+  end
+
+# msgstr[4]
+  def handle_call({:dispatch_line, ~s(msgstr[4] "") <> _tail}, _from, %{msgid_plural: msgid_plural} = state) do
+    translated_string =
+      case prepare_string(msgid_plural) |> Getatrex.Translator.Google.translate_to_locale(state.to_lang, state.request_mode, state.api_key) do
+        {:ok, translated_string} -> revert_string(translated_string)
+        {:error, error} ->
+          Logger.error "Cannot translate [#{msgid_plural}]. Reason: #{inspect error}"
+          ""
+      end
+
+    {:reply, :ok, Map.put(state, :msgstr4, translated_string)}
+  end
+
+# msgstr[3]
+  def handle_call({:dispatch_line, ~s(msgstr[3] "") <> _tail}, _from, %{msgid_plural: msgid_plural} = state) do
+    translated_string =
+      case prepare_string(msgid_plural) |> Getatrex.Translator.Google.translate_to_locale(state.to_lang, state.request_mode, state.api_key) do
+        {:ok, translated_string} -> revert_string(translated_string)
+        {:error, error} ->
+          Logger.error "Cannot translate [#{msgid_plural}]. Reason: #{inspect error}"
+          ""
+      end
+
+    {:reply, :ok, Map.put(state, :msgstr3, translated_string)}
+  end
+
+# msgstr[2]
+  def handle_call({:dispatch_line, ~s(msgstr[2] "") <> _tail}, _from, %{msgid_plural: msgid_plural} = state) do
+    translated_string =
+      case prepare_string(msgid_plural) |> Getatrex.Translator.Google.translate_to_locale(state.to_lang, state.request_mode, state.api_key) do
+        {:ok, translated_string} -> revert_string(translated_string)
+        {:error, error} ->
+          Logger.error "Cannot translate [#{msgid_plural}]. Reason: #{inspect error}"
+          ""
+      end
+
+    {:reply, :ok, Map.put(state, :msgstr2, translated_string)}
+  end
+
 # msgstr[1]
   def handle_call({:dispatch_line, ~s(msgstr[1] "") <> _tail}, _from, %{msgid_plural: msgid_plural} = state) do
     translated_string =
@@ -143,6 +195,26 @@ defmodule Getatrex.Collector do
   def handle_call({:dispatch_line, ~s(msgstr[1] ) <> tail}, _from, %{msgid: msgid} = state) do
     [[_, msgstr1]] = Regex.scan(~r/^"(.*?)"$/, tail)
     {:reply, :ok, Map.put(state, :msgstr1, msgstr1)}
+  end
+# msgstr2
+  def handle_call({:dispatch_line, ~s(msgstr[2] ) <> tail}, _from, %{msgid: msgid} = state) do
+    [[_, msgstr2]] = Regex.scan(~r/^"(.*?)"$/, tail)
+    {:reply, :ok, Map.put(state, :msgstr2, msgstr2)}
+  end
+# msgstr3
+  def handle_call({:dispatch_line, ~s(msgstr[3] ) <> tail}, _from, %{msgid: msgid} = state) do
+    [[_, msgstr3]] = Regex.scan(~r/^"(.*?)"$/, tail)
+    {:reply, :ok, Map.put(state, :msgstr3, msgstr3)}
+  end
+# msgstr4
+  def handle_call({:dispatch_line, ~s(msgstr[4] ) <> tail}, _from, %{msgid: msgid} = state) do
+    [[_, msgstr4]] = Regex.scan(~r/^"(.*?)"$/, tail)
+    {:reply, :ok, Map.put(state, :msgstr4, msgstr4)}
+  end
+# msgstr5
+  def handle_call({:dispatch_line, ~s(msgstr[5] ) <> tail}, _from, %{msgid: msgid} = state) do
+    [[_, msgstr5]] = Regex.scan(~r/^"(.*?)"$/, tail)
+    {:reply, :ok, Map.put(state, :msgstr5, msgstr5)}
   end
 
 # -----------------
