@@ -192,8 +192,7 @@ defmodule Mix.Tasks.Getatrex do
   end
 
   defp error_po?(switches) do
-    switches
-    |> Keyword.get(:error_po, false)
+    ! Keyword.get(switches, :no_error_po, false)
   end
 
   defp api_key(switches) do
