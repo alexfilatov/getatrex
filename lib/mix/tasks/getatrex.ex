@@ -23,7 +23,7 @@ defmodule Mix.Tasks.Getatrex do
   def run(argv) do
     {switches, args, _invalid} = 
       argv
-      |> OptionParser.parse(aliases: [a: :all], strict: [all: :boolean, error_po: :boolean, replace: :boolean, request_mode: :string, api_key: :string])
+      |> OptionParser.parse(aliases: [a: :all], strict: [all: :boolean, no_error_po: :boolean, replace: :boolean, request_mode: :string, api_key: :string])
 
       switches
       |> which_languages(args)
@@ -113,6 +113,11 @@ defmodule Mix.Tasks.Getatrex do
     Mix.shell.info ""
     Mix.shell.info "where `es` - target language (should be created by gettext before getatrex)"
     Mix.shell.info ""
+    Mix.shell.info "Options:"
+    Mix.shell.info "\t-a, --a\t - target all available languages"
+    Mix.shell.info "\t--no-error-po\t - doesn't translate `error_po` files (default translate)"
+    Mix.shell.info "\t--replace\t - replace and backup previous translations (default doesn't replace)"
+    Mix.shell.info "\t--request_mode [:post | :get --api_key <key>]\t - method to query google apis. GET method require to supply a valid api key to the --api-key switch"
     Mix.shell.info "Please read README.md https://github.com/alexfilatov/getatrex#getting-started"
  end
 
