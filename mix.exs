@@ -1,13 +1,13 @@
 defmodule Getatrex.Mixfile do
   use Mix.Project
 
-  @version "0.1.1"
+  @version "0.1.2"
 
   def project do
     [
       app: :getatrex,
       version: @version,
-      elixir: "~> 1.9",
+      elixir: "~> 1.10",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       deps: deps(),
@@ -21,34 +21,23 @@ defmodule Getatrex.Mixfile do
     ]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:logger]]
+    [extra_applications: [:logger, :hackney]]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:my_dep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:my_dep, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
-  #
-  # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:gettext, "~> 0.18"},
-      {:jason, "~> 1.2"},
-      {:goth, "~> 1.2"},
+      {:gettext, "~> 0.22"},
+      {:httpoison, "~> 1.8"},
+      {:jason, "~> 1.4"},
+      {:goth, "~> 1.4"},
       {:remix, "~> 0.0.2", only: :dev, runtime: false},
-      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.3", only: [:dev, :test], runtime: false},
       {:mock, "~> 0.3", only: :test},
-      {:excoveralls, "~> 0.13", only: :test},
-      {:ex_doc, "~> 0.22", only: :dev}
+      {:excoveralls, "~> 0.16", only: :test},
+      {:ex_doc, "~> 0.29", only: :dev}
     ]
   end
 

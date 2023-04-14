@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       # Bump cache key version below when changing elixir version
-      - image: circleci/elixir:1.9
+      - image: circleci/elixir:1.10
     environment:
       - MIX_ENV: test
     # resource_class: medium+
@@ -38,7 +38,7 @@ jobs:
           paths:
             - _build
             - ~/.mix
-      - run: mix dialyzer --halt-exit-status
+      - run: mix dialyzer
       - run: mix credo --only warning
       - run: mix test
 test:
