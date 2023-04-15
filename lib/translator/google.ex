@@ -13,14 +13,16 @@ defmodule Getatrex.Translator.Google do
     headers = [{"Authorization", "Bearer #{token.token}"}]
 
     case HTTPoison.post(@endpoint, body, headers) do
-      {:ok, %{body: body}} ->
-        first = body
-          |> Jason.decode!()
-          |> (fn(decoded) -> decoded["data"]["translations"] end).()
-          |> (fn(translations) -> translations |> List.first() end).()
-        {:ok, first["translatedText"]}
-
+      {:ok, %{body: body}} -> translated_text(Jason.decode!(body))
       error -> {:error, "Error during request API #{inspect error}"}
     end
+  end
+
+  defp translated_text(%{"data" => %{"translations" => translations}}) do
+    {:ok, List.first(translations)["translatedText"]}
+  end
+
+  defp translated_text(%{"error" => %{"code" => code, "message" => message}}) do
+    {:error, "Error #{code}: #{message}"}
   end
 end
