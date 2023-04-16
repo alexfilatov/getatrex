@@ -17,7 +17,8 @@ defmodule Getatrex.Mixfile do
       name: "Getatrex",
       docs: [source_ref: "v#{@version}", main: "readme", extras: ["README.md"]],
       description: description(),
-      package: package()
+      package: package(),
+      elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
 
@@ -49,7 +50,17 @@ defmodule Getatrex.Mixfile do
     [
       maintainers: ["Alex Filatov"],
       licenses: ["Apache 2.0"],
-      links: %{"Github" => "https://github.com/alexfilatov/getatrex"}
+      links: %{"Github" => "https://github.com/alexfilatov/getatrex"},
+      docs: [
+        source_ref: "v#{@version}",
+        source_url: "https://github.com/alexfilatov/getatrex",
+        dependencies: [
+          ex_doc: "~> 0.29.4"
+        ]
+      ]
     ]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test"]
+  defp elixirc_paths(_), do: ["lib"]
 end
