@@ -9,3 +9,4 @@ Overloaded contract for 'Elixir.Getatrex.Translator.Google':translate/1 has over
 :0: Unknown function 'Elixir.Mix':shell/0
 :0: Unknown type 'Elixir.HTTPResponse':t/0
 :0: Unknown type 'Elixir.HTTPoison.HTTPResponse':t/0
+:0: Unknown function 'Elixir.HTTPoison':post/3
