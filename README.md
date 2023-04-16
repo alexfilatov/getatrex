@@ -39,7 +39,7 @@ Next, open your config/config.exs file and add the following configuration:
 
 ```
 # Google credentials
-config :goth, json: "goth_credentials.json" |> File.read!
+config :goth, json: "path/to/goth_credentials.json" |> File.read!
 
 ```  
 Replace `path/to/goth_credentials.json` with the actual path to your credentials file.
