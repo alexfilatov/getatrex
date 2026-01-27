@@ -1,5 +1,1 @@
-use Mix.Config
-
-config :remix,
-  escript: false,
-  silent: false
+import Config

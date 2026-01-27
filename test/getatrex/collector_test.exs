@@ -2,9 +2,27 @@ defmodule Getatrex.CollectorTest do
   use ExUnit.Case
   alias Getatrex.{Collector, Writer}
   import Getatrex.Test.Helper
-  import Mock
+
+  defmodule TestTranslator do
+    def translate_to_locale(_text, _locale) do
+      Application.get_env(:getatrex, :test_translation_result, {:ok, "TRANSLATED STRING"})
+    end
+  end
 
   setup context do
+    previous_translator = Application.get_env(:getatrex, :translator)
+    Application.put_env(:getatrex, :translator, TestTranslator)
+
+    on_exit(fn ->
+      if previous_translator do
+        Application.put_env(:getatrex, :translator, previous_translator)
+      else
+        Application.delete_env(:getatrex, :translator)
+      end
+
+      Application.delete_env(:getatrex, :test_translation_result)
+    end)
+
     if context[:writer] do
       reset_file() |> Writer.start_link()
     end
@@ -63,17 +81,12 @@ defmodule Getatrex.CollectorTest do
     state = :sys.get_state(pid)
     assert state.msgid == "Here is one string to translate"
 
-    # here we translate msgid:
-    # 1. assert called translator
-    # 2. assert result of translation
-    # 2.1 correct translation
-    with_mock Getatrex.Translator.Google, [translate_to_locale: fn(_text, _locale) -> {:ok, "TRANSLATED STRING"} end] do
-      Collector.dispatch_line(~s(msgstr ""\n))
-      state = :sys.get_state(pid)
+    Application.put_env(:getatrex, :test_translation_result, {:ok, "TRANSLATED STRING"})
 
-      assert called Getatrex.Translator.Google.translate_to_locale("Here is one string to translate", "de")
-      assert state.msgstr == "TRANSLATED STRING"
-    end
+    Collector.dispatch_line(~s(msgstr ""\n))
+    state = :sys.get_state(pid)
+
+    assert state.msgstr == "TRANSLATED STRING"
   end
 
   @tag :writer
@@ -82,113 +95,112 @@ defmodule Getatrex.CollectorTest do
     state = :sys.get_state(pid)
     assert state.msgid == "Here is one string to translate"
 
-    with_mock Getatrex.Translator.Google, [translate_to_locale: fn(_text, _locale) -> {:error, :some_error} end] do
-      Collector.dispatch_line(~s(msgstr ""\n))
-      state = :sys.get_state(pid)
+    Application.put_env(:getatrex, :test_translation_result, {:error, :some_error})
 
-      assert called Getatrex.Translator.Google.translate_to_locale("Here is one string to translate", "de")
-      assert state.msgstr == ""
-    end
+    Collector.dispatch_line(~s(msgstr ""\n))
+    state = :sys.get_state(pid)
+
+    assert state.msgstr == ""
   end
 
   describe "writing message" do
     @tag :writer
     test "writing entire simple message", %{pid: pid} do
-      with_mock Getatrex.Translator.Google, [translate_to_locale: fn(_text, _locale) -> {:ok, "TRANSLATED STRING"} end] do
-        Collector.dispatch_line(~s(msgid "Here is one string to translate"))
-        Collector.dispatch_line(~s(msgstr ""))
-        Collector.dispatch_line("")
+      Application.put_env(:getatrex, :test_translation_result, {:ok, "TRANSLATED STRING"})
 
-        state = :sys.get_state(pid)
-        assert file_contents() == ([
-          ~s(msgid "Here is one string to translate"),
-          ~s(msgstr "TRANSLATED STRING"),
-          ""
-          ] |> Enum.join("\n")
-          ) <> "\n"
-      end
+      Collector.dispatch_line(~s(msgid "Here is one string to translate"))
+      Collector.dispatch_line(~s(msgstr ""))
+      Collector.dispatch_line("")
+
+      :sys.get_state(pid)
+      assert file_contents() == ([
+        ~s(msgid "Here is one string to translate"),
+        ~s(msgstr "TRANSLATED STRING"),
+        ""
+        ] |> Enum.join("\n")
+        ) <> "\n"
     end
 
     @tag :writer
-    test "writing entire simple message with mentions", %{pid: pid} do
-      with_mock Getatrex.Translator.Google, [:passthrough], [translate_to_locale: fn(_text, _locale) -> {:ok, "TRANSLATED STRING"} end] do
-        Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:17")
-        Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:18")
-        Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:19")
-        Collector.dispatch_line(~s(msgid "Here is one string to translate"))
-        Collector.dispatch_line(~s(msgstr ""))
-        Collector.dispatch_line("")
+    test "writing entire simple message with mentions", %{pid: _pid} do
+      Application.put_env(:getatrex, :test_translation_result, {:ok, "TRANSLATED STRING"})
 
-        assert file_contents() == ([
-          "#: web/templates/layout/top_navigation.html.eex:17",
-          "#: web/templates/layout/top_navigation.html.eex:18",
-          "#: web/templates/layout/top_navigation.html.eex:19",
-          ~s(msgid "Here is one string to translate"),
-          ~s(msgstr "TRANSLATED STRING"),
-          ""
-          ] |> Enum.join("\n")
-          ) <> "\n"
-      end
+      Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:17")
+      Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:18")
+      Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:19")
+      Collector.dispatch_line(~s(msgid "Here is one string to translate"))
+      Collector.dispatch_line(~s(msgstr ""))
+      Collector.dispatch_line("")
+
+      assert file_contents() == ([
+        "#: web/templates/layout/top_navigation.html.eex:17",
+        "#: web/templates/layout/top_navigation.html.eex:18",
+        "#: web/templates/layout/top_navigation.html.eex:19",
+        ~s(msgid "Here is one string to translate"),
+        ~s(msgstr "TRANSLATED STRING"),
+        ""
+        ] |> Enum.join("\n")
+        ) <> "\n"
     end
 
     @tag :writer
-    test "writing two blocks", %{pid: pid} do
-      with_mock Getatrex.Translator.Google, [:passthrough], [translate_to_locale: fn(_text, _locale) -> {:ok, "TRANSLATED STRING"} end] do
-        Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:17")
-        Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:18")
-        Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:19")
-        Collector.dispatch_line(~s(msgid "Here is one string to translate"))
-        Collector.dispatch_line(~s(msgstr ""))
-        Collector.dispatch_line("")
+    test "writing two blocks", %{pid: _pid} do
+      Application.put_env(:getatrex, :test_translation_result, {:ok, "TRANSLATED STRING"})
 
-        Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:21")
-        Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:22")
-        Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:23")
-        Collector.dispatch_line(~s(msgid "Here is one string to translate2"))
-        Collector.dispatch_line(~s(msgstr ""))
-        Collector.dispatch_line("")
+      Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:17")
+      Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:18")
+      Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:19")
+      Collector.dispatch_line(~s(msgid "Here is one string to translate"))
+      Collector.dispatch_line(~s(msgstr ""))
+      Collector.dispatch_line("")
 
-        assert file_contents() == ([
-          "#: web/templates/layout/top_navigation.html.eex:17",
-          "#: web/templates/layout/top_navigation.html.eex:18",
-          "#: web/templates/layout/top_navigation.html.eex:19",
-          ~s(msgid "Here is one string to translate"),
-          ~s(msgstr "TRANSLATED STRING"),
-          "",
-          "#: web/templates/layout/top_navigation.html.eex:21",
-          "#: web/templates/layout/top_navigation.html.eex:22",
-          "#: web/templates/layout/top_navigation.html.eex:23",
-          ~s(msgid "Here is one string to translate2"),
-          ~s(msgstr "TRANSLATED STRING"),
-          "",
-          ] |> Enum.join("\n")
-          ) <> "\n"
-      end
+      Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:21")
+      Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:22")
+      Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:23")
+      Collector.dispatch_line(~s(msgid "Here is one string to translate2"))
+      Collector.dispatch_line(~s(msgstr ""))
+      Collector.dispatch_line("")
+
+      assert file_contents() == ([
+        "#: web/templates/layout/top_navigation.html.eex:17",
+        "#: web/templates/layout/top_navigation.html.eex:18",
+        "#: web/templates/layout/top_navigation.html.eex:19",
+        ~s(msgid "Here is one string to translate"),
+        ~s(msgstr "TRANSLATED STRING"),
+        "",
+        "#: web/templates/layout/top_navigation.html.eex:21",
+        "#: web/templates/layout/top_navigation.html.eex:22",
+        "#: web/templates/layout/top_navigation.html.eex:23",
+        ~s(msgid "Here is one string to translate2"),
+        ~s(msgstr "TRANSLATED STRING"),
+        "",
+        ] |> Enum.join("\n")
+        ) <> "\n"
     end
 
     @tag :writer
-    test "language block", %{pid: pid} do
-      with_mock Getatrex.Translator.Google, [:passthrough], [translate_to_locale: fn(_text, _locale) -> {:ok, "TRANSLATED STRING"} end] do
-        Collector.dispatch_line("## Use `mix gettext.extract --merge` or `mix gettext.merge`")
-        Collector.dispatch_line("## to merge POT files into PO files.")
-        Collector.dispatch_line(~s(msgid ""))
-        Collector.dispatch_line(~s(msgstr ""))
-        Collector.dispatch_line(~s("Language: de\n"))
+    test "language block", %{pid: _pid} do
+      Application.put_env(:getatrex, :test_translation_result, {:ok, "TRANSLATED STRING"})
 
-        assert file_contents() == ([
-          ~s(## Use `mix gettext.extract --merge` or `mix gettext.merge`),
-          ~s(## to merge POT files into PO files.),
-          ~s(msgid ""),
-          ~s(msgstr ""),
-          ~s("Language: de\n"),
-          "",
-          ] |> Enum.join("\n")
-          )
-      end
+      Collector.dispatch_line("## Use `mix gettext.extract --merge` or `mix gettext.merge`")
+      Collector.dispatch_line("## to merge POT files into PO files.")
+      Collector.dispatch_line(~s(msgid ""))
+      Collector.dispatch_line(~s(msgstr ""))
+      Collector.dispatch_line(~s("Language: de\n"))
+
+      assert file_contents() == ([
+        ~s(## Use `mix gettext.extract --merge` or `mix gettext.merge`),
+        ~s(## to merge POT files into PO files.),
+        ~s(msgid ""),
+        ~s(msgstr ""),
+        ~s("Language: de\n"),
+        "",
+        ] |> Enum.join("\n")
+        )
     end
 
     @tag :writer
-    test "already translated block", %{pid: pid} do
+    test "already translated block", %{pid: _pid} do
       Collector.dispatch_line("#: web/templates/layout/top_navigation.html.eex:19")
       Collector.dispatch_line(~s(msgid "Here is one string to translate"))
       Collector.dispatch_line(~s(msgstr "Translated line"))
